@@ -1,9 +1,13 @@
-from selenium.webdriver import Keys, ActionChains
+#from selenium.webdriver import Keys, ActionChains
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.remote.webelement import WebElement
 from bs4 import BeautifulSoup
+#from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+import time
 import time
 
 def find_element(app, value, by=By.XPATH, timeout=45) -> WebElement:
@@ -47,18 +51,35 @@ def click(element):
 class Client:
     
     def __init__(self, phone):
+        # Set up Firefox options
         options = Options()
-        options.add_argument("--headless")
+        options.add_argument("--headless")  # Run in headless mode
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-gpu")
         options.add_argument("--window-size=1920,1080")
+
+        # Initialize the WebDriver
         self.app = webdriver.Firefox(options=options)
-        self.app.get("https://web.splus.ir")
-        action = ActionChains(self.app)
-        action.send_keys(phone[1:])
-        action.pause(10)
-        action.send_keys(Keys.ENTER)
-        action.perform()
+        
+        try:
+            # Open the target website
+            self.app.get("https://web.splus.ir")
+            time.sleep(2)  # Wait for the page to load
+
+            # Perform actions
+            action = ActionChains(self.app)
+            action.send_keys(phone[1:])  # Send phone number without the first character
+            action.pause(1)  # Pause for 1 second
+            action.send_keys(Keys.ENTER)  # Press Enter
+            action.perform()
+            
+            time.sleep(10)  # Wait to observe the result (optional)
+        
+        except Exception as e:
+            print(f"An error occurred: {e}")
+        
+        finally:
+            self.app.quit()  # Ensure 
 
     def login(self, code: int):
         action = ActionChains(self.app)
