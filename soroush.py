@@ -23,13 +23,13 @@ async def find_element(app, value, by=By.XPATH, timeout=45) -> WebElement:
 
     while 1:
         try:
-            return app.await find_element(by, value)
+            return await app.find_element(by, value)
         except:
             # Attempt to use an alternative path if one is defined
             if value in alternate_paths:
                 alt_value = alternate_paths[value]
                 try:
-                    return app.await find_element(by, alt_value)
+                    return await app.find_element(by, alt_value)
                 except:
                     pass
             time.sleep(1)
@@ -95,4 +95,4 @@ class Client:
     async def exit(self):
         self.app.close()
         self.app.quit()
-
+    
