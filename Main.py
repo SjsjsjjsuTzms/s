@@ -61,12 +61,12 @@ async def getphone(Event:types.Message,Call:CallbackQuery):
         Final = phone.text
         Final = phone.text.translate(str.maketrans('۰۱۲۳۴۵۶۷۸۹', '0123456789'))        
         Final = Final.replace("+98", "09")                        
-        app = SClient(Final)
+        app = await SClient(Final)
         print (app)
         result=await Bot.ask(chat_id=Call.message.chat.id,text="Enter code or /cancell",reply_markup=cancell)        
         if result.text=="/cancell":
             await Call.message.reply("cancell Ok",reply_markup=START)            
-        response = app.login(result.text)
+        response = await app.login(result.text)
         if response:
             await Call.message.reply(f"Login to {Final} was successful",reply_markup=wait)            
             num=await Bot.ask(chat_id=Call.message.chat.id,text="لیست شماره هاتو بفرست \n 09128610029 \n09126184872 \n09128097882\n یا /cancell",reply_markup=cancell)
@@ -75,12 +75,12 @@ async def getphone(Event:types.Message,Call:CallbackQuery):
                 return
             for number in num.text.split('\n'):                                
                 try:
-                    T= app.check(number)
+                    T= await app.check(number)
                     if T:
-                        app.send(str(database['banner1']))                
+                        await app.send(str(database['banner1']))                
                 except Exception as e:
                     await Call.message.reply(e)
-            app.exit()                       
+            await app.exit()                       
             await Call.message.reply(f"""❕هشدار:\n- اکانت {Final} با موفقیت از دیتابیس حذف شد ✅""",reply_markup=START)
         else:
             if result.text == "/cancell":
@@ -101,7 +101,6 @@ async def getpjdjdhohhntse(Event:types.Message,Call:CallbackQuery):
         await Call.message.reply(f"با موفقیت تنظیم شد , \nBanner :\n {time.text}",reply_markup=START)    
 print("Run")
 Bot.run()
-
 
 
 
