@@ -7,7 +7,7 @@ from asyncio import sleep
 import time
 import json
 import re
-from soroush import Client
+from soroush import Client as SClient
 
 
 
