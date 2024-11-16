@@ -72,7 +72,7 @@ class Client:
         await asyncio.sleep(2)
         x = await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
         await asyncio.sleep(1)
-        print (x)
+        print (BeautifulSoup(self.app.page_source, "html.parser"))
         
         input_field = find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input')
         input_field.send_keys(phone[1:])
