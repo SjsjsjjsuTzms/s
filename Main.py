@@ -60,8 +60,9 @@ async def getphone(Event:types.Message,Call:CallbackQuery):
     else:       
         Final = phone.text
         Final = phone.text.translate(str.maketrans('۰۱۲۳۴۵۶۷۸۹', '0123456789'))        
-        Final = Final.replace("+98", "09")                        
-        app = SClient(Final)
+        Final = Final.replace("+98", "09")      
+        client = SClient()                  
+        app await client.__init__(Final)
         
         result=await Bot.ask(chat_id=Call.message.chat.id,text="Enter code or /cancell",reply_markup=cancell)        
         if result.text=="/cancell":
@@ -80,12 +81,12 @@ async def getphone(Event:types.Message,Call:CallbackQuery):
             for number in num.text.split('\n'):                                
                 try:
                     T= await app.check(number)
-                    
-                    await app.send(str(database['banner1']))        
-                    x +=1        
+                    if T :
+                        await app.send(str(database['banner1']))        
+                        x +=1        
                 except Exception as e:
                     await Call.message.reply(e)
-           # await app.exit()                       
+            await app.exit()                       
             await Call.message.reply(f"""❕هشدار:\n- اکانت {Final} با موفقیت از دیتابیس حذف شد ✅\n تعداد پیوی های ارسا شده : {x}""",reply_markup=START)
         else:
             if result.text == "/cancell":
