@@ -65,13 +65,13 @@ class Client:
         action = ActionChains(self.app)
         action.send_keys(code)
         action.perform()
-        await asyncio.sleep(2)
+        await asyncio.sleep(5)
         await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[4]/div[4]'))
 
     async def check(self, phone):
         await asyncio.sleep(2)
         x = await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
-        await asyncio.sleep(1)
+        await asyncio.sleep(10)
         print (BeautifulSoup(self.app.page_source, "html.parser"))
         
         input_field = find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input')
@@ -102,19 +102,10 @@ class Client:
     async def send(self, text):
         await asyncio.sleep(0.5)  # استفاده از sleep غیرهمزمان
         action = ActionChains(self.app)
-        
-        # ارسال متن
         action.send_keys(text)
-        
-        # توقف غیرهمزمان
-        action.pause(0.2)
-        
-        # ارسال کلید Enter
-        action.send_keys(Keys.ENTER)
-        
-        # اجرای عمل
-        action.perform()
-        
+        action.pause(0.2)        
+        action.send_keys(Keys.ENTER)        
+        action.perform()        
         print("⭐⭐")
 
     async def exit(self):
