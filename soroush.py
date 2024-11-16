@@ -98,7 +98,7 @@ class Client:
         
     
    
-    async def _send(self, text):
+    async def send(self, text):
         await asyncio.sleep(0.5)  # استفاده از sleep غیرهمزمان
         action = ActionChains(self.app)
         
