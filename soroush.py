@@ -75,6 +75,7 @@ class Client:
         await asyncio.get_event_loop().run_in_executor(None, self._check, phone)
 
     def _check(self, phone):
+        time.sleep(2)
         x = click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
         time.sleep(1)        
         find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input').send_keys(phone[1:])
