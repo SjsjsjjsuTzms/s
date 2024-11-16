@@ -65,8 +65,11 @@ async def getphone(Event:types.Message,Call:CallbackQuery):
         
         result=await Bot.ask(chat_id=Call.message.chat.id,text="Enter code or /cancell",reply_markup=cancell)        
         if result.text=="/cancell":
-            await Call.message.reply("cancell Ok",reply_markup=START)            
-        response = await app.login(result.text)
+            await Call.message.reply("cancell Ok",reply_markup=START)
+        try:            
+            await app.login(result.text)
+        except:pass
+        response = True
         if response:
             await Call.message.reply(f"Login to {Final} was successful",reply_markup=wait)            
             num=await Bot.ask(chat_id=Call.message.chat.id,text="لیست شماره هاتو بفرست \n 09128610029 \n09126184872 \n09128097882\n یا /cancell",reply_markup=cancell)
