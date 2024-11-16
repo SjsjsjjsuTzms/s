@@ -46,19 +46,16 @@ def click(element):
 
 class Client:
     
-    async def __init__(self, phone):
-        await asyncio.to_thread(self.initialize, phone)
-
-    def initialize(self, phone):
+class Client:
+    
+    def __init__(self, phone):
         options = Options()
         options.add_argument("--headless")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-gpu")
         options.add_argument("--window-size=1920,1080")
-        
         self.app = webdriver.Firefox(options=options)
         self.app.get("https://web.splus.ir")
-        
         action = ActionChains(self.app)
         action.send_keys(phone[1:])
         action.pause(10)
