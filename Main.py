@@ -81,7 +81,7 @@ async def getphone(Event:types.Message,Call:CallbackQuery):
             for number in num.text.split('\n'):                                
                 try:
                     T= await app.check(number)
-                    if T :
+                    if T == "ok":
                         await app.send(str(database['banner1']))        
                         x +=1        
                 except Exception as e:

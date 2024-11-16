@@ -92,7 +92,7 @@ class Client:
         print (f"|{name}|{phone}|")
         if phone == name:
             print ("🦆")
-            return True
+            return "ok"
         return False
         
     
