@@ -70,42 +70,54 @@ class Client:
         action.perform()
         time.sleep(5)
         click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[4]/div[4]'))
-        
+
     async def check(self, phone):
-        await asyncio.get_event_loop().run_in_executor(None, self._check, phone)
+        await self.async_sleep(2)
+        await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
+        await self.async_sleep(1)
+        
+        input_field = find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input')
+        input_field.send_keys(phone[1:])
+        await self.async_sleep(0.2)
 
-    def _check(self, phone):
-        time.sleep(2)
-        x = click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
-        time.sleep(1)        
-        find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input').send_keys(phone[1:])
-        time.sleep(0.2)
-        click(find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/input'))
-        time.sleep(0.2)
-        find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/input').send_keys(phone)
-        time.sleep(0.2)
-        click(find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/button[2]'))
-        time.sleep(0.2)
+        second_input_field = find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/input')
+        await click(second_input_field)
+        await self.async_sleep(0.2)
 
-        name = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1].find("h3").text
+        second_input_field.send_keys(phone)
+        await self.async_sleep(0.2)
+
+        await click(find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/button[2]'))
+        await self.async_sleep(0.2)
+
+        name = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class": "info"})[-1].find("h3").text
         print(name, phone, sep=" - ")
+
         if str(phone) == str(name):
-            print ("🦆")
+            print("🦆")
             return "ok"
         return False
+
         
     
-    async def send(self, text):
-        await asyncio.get_event_loop().run_in_executor(None, self._send, text)
-
-    def _send(self, text):
-        time.sleep(0.5)
+   
+    async def _send(self, text):
+        await asyncio.sleep(0.5)  # استفاده از sleep غیرهمزمان
         action = ActionChains(self.app)
+        
+        # ارسال متن
         action.send_keys(text)
+        
+        # توقف غیرهمزمان
         action.pause(0.2)
+        
+        # ارسال کلید Enter
         action.send_keys(Keys.ENTER)
+        
+        # اجرای عمل
         action.perform()
-        print ("⭐⭐")
+        
+        print("⭐⭐")
 
     async def exit(self):
     # اگر app.close() و app.quit() همزمان هستند، می‌توانید مستقیماً آنها را فراخوانی کنید.
