@@ -70,8 +70,9 @@ class Client:
 
     async def check(self, phone):
         await asyncio.sleep(2)
-        await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
+        x = await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
         await asyncio.sleep(1)
+        print (x)
         
         input_field = find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input')
         input_field.send_keys(phone[1:])
