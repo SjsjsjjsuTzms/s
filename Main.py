@@ -62,7 +62,7 @@ async def getphone(Event:types.Message,Call:CallbackQuery):
         Final = phone.text.translate(str.maketrans('۰۱۲۳۴۵۶۷۸۹', '0123456789'))        
         Final = Final.replace("+98", "09")      
         client = SClient()                  
-        app await client.__init__(Final)
+        app = await client.__init__(Final)
         
         result=await Bot.ask(chat_id=Call.message.chat.id,text="Enter code or /cancell",reply_markup=cancell)        
         if result.text=="/cancell":
