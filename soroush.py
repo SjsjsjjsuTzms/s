@@ -37,7 +37,7 @@ def find_element(app, value, by=By.XPATH, timeout=45) -> WebElement:
 
     raise Exception(f"Element not found: {value}")
 
-def click(element):
+async def click(element):
     while True:
         try:
             return element.click()
