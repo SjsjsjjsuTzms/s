@@ -46,7 +46,6 @@ def click(element):
 
 class Client:
     
-class Client:
     
     def __init__(self, phone):
         options = Options()
