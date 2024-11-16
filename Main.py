@@ -95,4 +95,7 @@ class Client:
     async def exit(self):
         self.app.close()
         self.app.quit()
-
+s1 = Client(input("phone = "))
+s1.login(input("code = "))
+s1.check("09144084093")
+s1.send(input("msg = "))
