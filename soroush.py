@@ -76,8 +76,7 @@ class Client:
 
     def _check(self, phone):
         x = click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
-        time.sleep(1)
-        
+        time.sleep(1)        
         find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input').send_keys(phone[1:])
         time.sleep(0.2)
         click(find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/input'))
@@ -88,7 +87,8 @@ class Client:
         time.sleep(0.2)
         name = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1].find("h3").text
         print (f"|{name}|{phone}|")
-        if str(phone) == str(name):
+        if phone == name:
+            print ("🦆")
             return True
         return False
         
