@@ -87,6 +87,7 @@ class Client:
         time.sleep(0.2)
 
         name = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1].find("h3").text
+        print(name, phone, sep=" - ")
         if str(phone) == str(name):
             print ("🦆")
             return "ok"
