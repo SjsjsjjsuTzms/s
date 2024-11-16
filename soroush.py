@@ -75,8 +75,9 @@ class Client:
         await asyncio.get_event_loop().run_in_executor(None, self._check, phone)
 
     def _check(self, phone):
-        click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
+        x = click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
         time.sleep(1)
+        
         find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input').send_keys(phone[1:])
         time.sleep(0.2)
         click(find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/input'))
@@ -85,10 +86,8 @@ class Client:
         time.sleep(0.2)
         click(find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/button[2]'))
         time.sleep(0.2)
-        name = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1].find("h3").text
-        x = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1]
-        print (x)
-        if phone == name:
+        name = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1]
+        if phone in name.text:
             return True
         return False
         
