@@ -1,3 +1,5 @@
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 from selenium.webdriver import Keys, ActionChains
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -21,11 +23,10 @@ def find_element(app, value, by=By.XPATH, timeout=45) -> WebElement:
             "/html/body/div[2]/div/div/div[2]/div[4]/div[2]/div[2]/div[2]/div[1]/button"
     }
 
-    while 1:
+    while True:
         try:
             return app.find_element(by, value)
         except:
-            # Attempt to use an alternative path if one is defined
             if value in alternate_paths:
                 alt_value = alternate_paths[value]
                 try:
@@ -36,9 +37,8 @@ def find_element(app, value, by=By.XPATH, timeout=45) -> WebElement:
 
     raise Exception(f"Element not found: {value}")
 
-# تابع برای کلیک بر روی عنصر در Selenium با حداکثر تلاش
 def click(element):
-    while 1:
+    while True:
         try:
             return element.click()
         except:
@@ -48,7 +48,7 @@ class Client:
     
     def __init__(self, phone):
         options = Options()
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-gpu")
         options.add_argument("--window-size=1920,1080")
@@ -60,15 +60,20 @@ class Client:
         action.send_keys(Keys.ENTER)
         action.perform()
 
-    def login(self, code: int):
+    async def login(self, code: int):
+        await asyncio.get_event_loop().run_in_executor(None, self._login, code)
+
+    def _login(self, code):
         action = ActionChains(self.app)
         action.send_keys(code)
         action.perform()
         time.sleep(5)
         click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[4]/div[4]'))
         
-    
-    def check(self, phone):
+    async def check(self, phone):
+        await asyncio.get_event_loop().run_in_executor(None, self._check, phone)
+
+    def _check(self, phone):
         click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
         time.sleep(1)
         find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input').send_keys(phone[1:])
@@ -80,19 +85,17 @@ class Client:
         click(find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/button[2]'))
         time.sleep(0.2)
         name = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1].find("h3").text
-        if phone == name:
-            return True
-        return False
+        
+        return phone == name
     
-    def send(self, text):
+    async def send(self, text):
+        await asyncio.get_event_loop().run_in_executor(None, self._send, text)
+
+    def _send(self, text):
         time.sleep(0.5)
         action = ActionChains(self.app)
         action.send_keys(text)
         action.pause(0.2)
         action.send_keys(Keys.ENTER)
         action.perform()
-        
-s1 = Client(input("phone = "))
-s1.login(input("code = "))
-s1.check("09144084093")
-s1.send(input("msg = "))
+
