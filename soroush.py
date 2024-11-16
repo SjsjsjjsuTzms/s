@@ -72,23 +72,23 @@ class Client:
         click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[4]/div[4]'))
 
     async def check(self, phone):
-        await self.async_sleep(2)
+        await asyncio.sleep(2)
         await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
-        await self.async_sleep(1)
+        await asyncio.sleep(1)
         
         input_field = find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input')
         input_field.send_keys(phone[1:])
-        await self.async_sleep(0.2)
+        await asyncio.sleep(0.2)
 
         second_input_field = find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/input')
         await click(second_input_field)
-        await self.async_sleep(0.2)
+        await asyncio.sleep(0.2)
 
         second_input_field.send_keys(phone)
-        await self.async_sleep(0.2)
+        await asyncio.sleep(0.2)
 
         await click(find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/button[2]'))
-        await self.async_sleep(0.2)
+        await asyncio.sleep(0.2)
 
         name = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class": "info"})[-1].find("h3").text
         print(name, phone, sep=" - ")
