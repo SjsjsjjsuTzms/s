@@ -76,7 +76,6 @@ class Client:
         
         input_field = find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input')
         input_field.send_keys(phone[1:])
-        input_field.send_keys(phone[2:])
         await asyncio.sleep(0.2)
 
         second_input_field = find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/input')
