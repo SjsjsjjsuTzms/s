@@ -61,15 +61,12 @@ class Client:
         action.send_keys(Keys.ENTER)
         action.perform()
 
-    async def login(self, code: int):
-        await asyncio.get_event_loop().run_in_executor(None, self._login, code)
-
-    def _login(self, code):
+    async def login(self, code):
         action = ActionChains(self.app)
         action.send_keys(code)
         action.perform()
-        time.sleep(5)
-        click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[4]/div[4]'))
+        await asyncio.sleep(2)
+        await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[4]/div[4]'))
 
     async def check(self, phone):
         await asyncio.sleep(2)
