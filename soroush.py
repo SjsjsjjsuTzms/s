@@ -86,6 +86,8 @@ class Client:
         click(find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/button[2]'))
         time.sleep(0.2)
         name = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1].find("h3").text
+        x = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1]
+        print (x)
         if phone == name:
             return True
         return False
