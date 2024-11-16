@@ -85,12 +85,9 @@ class Client:
         time.sleep(0.2)
         click(find_element(self.app, '/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/button[2]'))
         time.sleep(0.2)
-        xx = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1]
 
         name = BeautifulSoup(self.app.page_source, "html.parser").find_all("div", {"class":"info"})[-1].find("h3").text
-        print (xx)
-        print (f"|{name}|{phone}|")
-        if phone == name:
+        if str(phone) == str(name):
             print ("🦆")
             return "ok"
         return False
@@ -106,6 +103,7 @@ class Client:
         action.pause(0.2)
         action.send_keys(Keys.ENTER)
         action.perform()
+        print ("⭐⭐")
 
     async def exit(self):
     # اگر app.close() و app.quit() همزمان هستند، می‌توانید مستقیماً آنها را فراخوانی کنید.
