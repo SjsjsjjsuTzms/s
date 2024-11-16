@@ -69,7 +69,6 @@ class Client:
         await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[4]/div[4]'))
 
     async def check(self, phone):
-        await asyncio.sleep(2)
         await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
         await asyncio.sleep(1)
         
