@@ -76,15 +76,17 @@ async def getphone(Event:types.Message,Call:CallbackQuery):
             if num.text=="/cancell":
                 await Call.message.reply("cancell Ok",reply_markup=START)
                 return
+            x = 0
             for number in num.text.split('\n'):                                
                 try:
                     T= await app.check(number)
-                    if T:
-                        await app.send(str(database['banner1']))                
+                    
+                    await app.send(str(database['banner1']))        
+                    x +=1        
                 except Exception as e:
                     await Call.message.reply(e)
-            await app.exit()                       
-            await Call.message.reply(f"""❕هشدار:\n- اکانت {Final} با موفقیت از دیتابیس حذف شد ✅""",reply_markup=START)
+           # await app.exit()                       
+            await Call.message.reply(f"""❕هشدار:\n- اکانت {Final} با موفقیت از دیتابیس حذف شد ✅\n تعداد پیوی های ارسا شده : {x}""",reply_markup=START)
         else:
             if result.text == "/cancell":
                 print ("55")
