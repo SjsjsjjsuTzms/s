@@ -56,21 +56,15 @@ async def main(cli, msg: types.Message):
 
             # تنظیمات Firefox برای حالت headless
             options = Options()
-            options.add_argument("--headless")  # افزودن حالت headless
+            options.add_argument("--headless")
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-gpu")
             options.add_argument("--window-size=1920,1080")
-
-            # راه‌اندازی Selenium به صورت گرافیکی و مقداردهی app
-
-            app = webdriver.Firefox(options).save_full_page_screenshot()
-            app.get("https://web.splus.ir")
-            # find_element(app, '//*[@id="sign-in-phone-number"]').send_keys(msg.text[1:])
-            action = ActionChains(app)
-            action.send_keys(msg.text[1:])
-            action.perform()
-            sleep(10)
-            action = ActionChains(app)
+            self.app = webdriver.Firefox(options=options)
+            self.app.get("https://web.splus.ir")
+            action = ActionChains(self.app)
+            action.send_keys(phone[1:])
+            action.pause(10)
             action.send_keys(Keys.ENTER)
             action.perform()
             await msg.reply("Code sended.")
