@@ -70,6 +70,8 @@ class Client:
 
     async def check(self, phone):
         await asyncio.sleep(2)
+        find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button')
+        print (BeautifulSoup(self.app.page_source, "html.parser"))
         x = await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
         await asyncio.sleep(1)
         #print (BeautifulSoup(self.app.page_source, "html.parser"))
