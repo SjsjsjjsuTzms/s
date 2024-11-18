@@ -36,7 +36,7 @@ def lichNumber(num):
   
 proxy = None
 Owner=[390353852,5394456754] # ایدی عددی بزار
-token="8023919010:AAFtivUU-IGSpfUYmTnEWWrOZ7LsRkxoQKM"
+token="8023919010:AAGCN859kl11gxmV3C0eEe6eX8pSzuSInOM"
 Bot=Client("CreateBot",api_id=15567484,api_hash="9cee14fbc3ea1fefd4bbb4fd4e2daa6d",bot_token=token)
 
       
@@ -73,12 +73,9 @@ async def getphone(Event:types.Message,Call:CallbackQuery):
         response = True
         if response:
             await Call.message.reply(f"Login to {Final} was successful",reply_markup=wait)            
-            num=await Bot.ask(chat_id=Call.message.chat.id,text="لیست شماره هاتو بفرست \n 09128610029 \n09126184872 \n09128097882\n یا /cancell",reply_markup=cancell)
-            if num.text=="/cancell":
-                await Call.message.reply("cancell Ok",reply_markup=START)
-                return
+            num = await app.check2()
             x = 0
-            for number in num.text.split('\n'):                                
+            for number in num:                                
                 try:
                     T= await app.check(number)
                     if T == "ok":
