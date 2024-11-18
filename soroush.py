@@ -73,7 +73,7 @@ class Client:
         find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button')
         gg = (BeautifulSoup(self.app.page_source, "html.parser"))
         with open(f'1.txt', 'a') as f:
-            f.write(gg) 
+            f.write(str(gg))
         x = await click(find_element(self.app, '/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[2]/button'))
         await asyncio.sleep(1)
         #print (BeautifulSoup(self.app.page_source, "html.parser"))
