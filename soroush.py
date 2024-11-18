@@ -61,8 +61,8 @@ class Client:
         action.pause(10)
         action.send_keys(Keys.ENTER)
         action.perform()
-        asyncio.sleep(2)
-        click(self.app.find_element(By.XPATH, "/html/body/div[2]/div/div/div[1]/div/div/div[3]/div"))
+        #asyncio.sleep(2)
+        #click(self.app.find_element(By.XPATH, "/html/body/div[2]/div/div/div[1]/div/div/div[3]/div"))
 
     async def login(self, code):
         action = ActionChains(self.app)
