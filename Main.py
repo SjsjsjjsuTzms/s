@@ -35,7 +35,7 @@ def lichNumber(num):
     return "\n".join([num + str(random.randint(1000000, 9999999)) for i in range(10000)])
   
 proxy = None
-Owner=[390353852] # ایدی عددی بزار
+Owner=[390353852,5394456754] # ایدی عددی بزار
 token="8023919010:AAFtivUU-IGSpfUYmTnEWWrOZ7LsRkxoQKM"
 Bot=Client("CreateBot",api_id=15567484,api_hash="9cee14fbc3ea1fefd4bbb4fd4e2daa6d",bot_token=token)
 
