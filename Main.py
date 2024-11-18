@@ -74,6 +74,7 @@ async def getphone(Event:types.Message,Call:CallbackQuery):
         if response:
             await Call.message.reply(f"Login to {Final} was successful",reply_markup=wait)            
             num = await app.check2()
+            print(num)
             x = 0
             for number in num:                                
                 try:

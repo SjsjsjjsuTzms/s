@@ -104,7 +104,7 @@ class Client:
                 search.send_keys(alpha)
                 await asyncio.sleep(1)  # استفاده از sleep غیرهمزمان
                 
-                for i in range(10000):
+                for i in range(1000):
                     try:
                         contact = self.app.find_element(By.XPATH, f"/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[1]/div[{i + 1}]")
                         contact.location_once_scrolled_into_view
@@ -120,6 +120,7 @@ class Client:
                         await asyncio.sleep(0.3)  # استفاده از sleep غیرهمزمان
                         
                     except Exception as e:
+                        print(e)
                         break
                 return phones
         except Exception as e:
