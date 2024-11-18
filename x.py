@@ -107,20 +107,17 @@ async def main(cli, msg: types.Message):
             await app.login(msg.text)
             await msg.reply("okay....")
             step += 1
-            # print(("*"*100 + "\n") * 100)
-            # input("do you accept this request from admin? (enter) :")
-            # system("cls")
             phones = []
             alphabet = list(string.ascii_lowercase)
-            search = find_element(app,By.XPATH, '//*[@id="search-input"]')
-            print (search)
+            search = find_element(app, '//*[@id="search-input"]',By.XPATH)
+            print(alphabet)
             for alpha in alphabet:
                 print (11)
                 search.location_once_scrolled_into_view
                 search.clear()
                 search.send_keys(alpha)
                 sleep(1)
-                for i in range(10000):
+                for i in range(300):
                     try:
                         print ("🦆")
                         contact = find_element1(app,By.XPATH, f"/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[1]/div[{i + 1}]")
