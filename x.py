@@ -12,12 +12,24 @@ import string
 from soroush import Client as SClient
 
 
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
+def find_element3(app, value, by=By.XPATH, timeout=45) -> WebElement:
+    try:
+        element = WebDriverWait(app, timeout).until(
+            EC.presence_of_element_located((by, value))
+        )
+        return element
+    except Exception as e:
+        raise Exception(f"Element not found: {value}. Error: {str(e)}")
+        
+        
 def find_element(app,value, by=By.XPATH, timeout=45) -> WebElement:
     end_time = time.time() + timeout
 
-    # while time.time() < end_time:
-    while 1:
+    while time.time() < end_time:
+    #while 1:
         try:
             return app.find_element(by, value)
         except:
@@ -108,9 +120,14 @@ async def main(cli, msg: types.Message):
             await msg.reply("okay....")
             step += 1
             phones = []
+            print(2)
             alphabet = list(string.ascii_lowercase)
-            search = find_element(app, '//*[@id="search-input"]',By.XPATH)
             print(alphabet)
+            print(3)
+           # search = find_element(app, '//*[@id="search-input"]',By.XPATH)
+            search = find_element(app ,"search-input",By.XPATH)
+            print(search)
+            print(4)
             for alpha in alphabet:
                 print (11)
                 search.location_once_scrolled_into_view
