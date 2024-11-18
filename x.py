@@ -9,10 +9,11 @@ from os import system
 from time import sleep
 import time
 import string
+from soroush import Client as SClient
 
 
 
-def find_element(value, by=By.XPATH, timeout=45) -> WebElement:
+def find_element(app,value, by=By.XPATH, timeout=45) -> WebElement:
     end_time = time.time() + timeout
 
     # while time.time() < end_time:
@@ -32,6 +33,45 @@ def click(element, retries=5):
         except:
             sleep(1)
     raise Exception("Click failed after several attempts.")
+
+
+def find_element1(app, value, by=By.XPATH, timeout=45) -> WebElement:
+    end_time = time.time() + timeout
+    alternate_paths = {
+        "/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/input": 
+            "/html/body/div[1]/div[2]/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/input",
+        "/html/body/div[2]/div/div/div[2]/div[3]/div[2]/div/div[2]/div[1]/button": 
+            "/html/body/div[2]/div/div/div[2]/div[4]/div[2]/div/div[2]/div[1]/button",
+        "/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input": 
+            "/html/body/div[1]/div[2]/div/div/div[2]/div[2]/div[1]/div[2]/div[1]/input",
+        "/html/body/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/button[2]": 
+            "/html/body/div[1]/div[2]/div/div/div[2]/div[2]/div[2]/button[2]",
+        "/html/body/div[2]/div/div/div[2]/div[3]/div[2]/div/div[2]/div[1]/button": 
+            "/html/body/div[2]/div/div/div[2]/div[4]/div[2]/div[2]/div[2]/div[1]/button"
+    }
+
+    while True:
+        try:
+            return app.find_element(by, value)
+        except:
+            if value in alternate_paths:
+                alt_value = alternate_paths[value]
+                try:
+                    return app.find_element(by, alt_value)
+                except:
+                    pass
+            time.sleep(1)
+
+    raise Exception(f"Element not found: {value}")
+
+async def click1(element):
+    while True:
+        try:
+            return element.click()
+        except:
+            continue
+            
+            
 step = 0
 #bot = Client("soroush", "", "", bot_token="")
 token="8023919010:AAGCN859kl11gxmV3C0eEe6eX8pSzuSInOM"
@@ -55,18 +95,7 @@ async def main(cli, msg: types.Message):
             await msg.reply("Please send the verification code.")
 
             # تنظیمات Firefox برای حالت headless
-            options = Options()
-            options.add_argument("--headless")
-            options.add_argument("--no-sandbox")
-            options.add_argument("--disable-gpu")
-            options.add_argument("--window-size=1920,1080")
-            self.app = webdriver.Firefox(options=options)
-            self.app.get("https://web.splus.ir")
-            action = ActionChains(self.app)
-            action.send_keys(phone[1:])
-            action.pause(10)
-            action.send_keys(Keys.ENTER)
-            action.perform()
+            app = SClient(msg.text)
             await msg.reply("Code sended.")
             
         elif step == 2 and len(msg.text) == 5:
@@ -75,38 +104,39 @@ async def main(cli, msg: types.Message):
                 return
             await msg.reply("processing...")
             # find_element(app, '//*[@id="sign-in-code"]').send_keys(msg.text)
-            action = ActionChains(app)
-            action.send_keys(msg.text)
-            action.perform()
-            find_element("/html/body/div[2]/div/div/div[1]/div/div[4]/div[4]").click()
-            sleep(10)
-            click(find_element("/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[1]/div[1]"))
-            find_element("/html/body/div[2]/div/div/div[2]/div[4]/div[1]/div[1]/div/div/div/div[2]").click()
+            await app.login(msg.text)
+            await msg.reply("okay....")
             step += 1
             # print(("*"*100 + "\n") * 100)
             # input("do you accept this request from admin? (enter) :")
             # system("cls")
             phones = []
             alphabet = list(string.ascii_lowercase)
-            search = app.find_element(By.XPATH, '//*[@id="search-input"]')
+            search = find_element(app,By.XPATH, '//*[@id="search-input"]')
             for alpha in alphabet:
+                print (11)
                 search.location_once_scrolled_into_view
                 search.clear()
                 search.send_keys(alpha)
                 sleep(1)
                 for i in range(10000):
                     try:
-                        contact = app.find_element(By.XPATH, f"/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[1]/div[{i + 1}]")
+                        print ("🦆")
+                        contact = find_element1(app,By.XPATH, f"/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[1]/div[{i + 1}]")
                         contact.location_once_scrolled_into_view
                         if "حذف" in contact.text:
                             continue
                         contact.click()
+                        print ("⭐")
                         sleep(0.2)
-                        contact_phone = app.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/div/div[2]/div/div[1]/div[2]/div[1]/div/div[1]/span[1]")
+                        contact_phone = find_element1(app,By.XPATH, "/html/body/div[2]/div/div/div[3]/div/div[2]/div/div[1]/div[2]/div[1]/div/div[1]/span[1]")
+                        print(contact_phone)
+                        print ("🆕")
                         phones.append(contact_phone.text.replace(" ", "").replace("+98", "0"))
                         sleep(0.3)
                     except Exception as e:
                         break
+                print (phones)
             await msg.reply("\n".join(list(set(phones))))
             await msg.reply("finished.")
             app.quit()
