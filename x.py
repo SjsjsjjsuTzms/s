@@ -92,7 +92,7 @@ async def main(cli, msg: types.Message):
 
         elif step == 1 and msg.text.startswith("09") and len(msg.text) == 11:
             step += 1
-            await msg.reply("Please send the verification code.")
+            await msg.reply("processing[10 sec]...")
 
             # تنظیمات Firefox برای حالت headless
             app = SClient(msg.text)
@@ -102,7 +102,7 @@ async def main(cli, msg: types.Message):
             if app is None:
                 await msg.reply("Error: Web driver is not initialized.")
                 return
-            await msg.reply("processing...")
+            await msg.reply("processing[15]...")
             # find_element(app, '//*[@id="sign-in-code"]').send_keys(msg.text)
             await app.login(msg.text)
             await msg.reply("okay....")
@@ -113,6 +113,7 @@ async def main(cli, msg: types.Message):
             phones = []
             alphabet = list(string.ascii_lowercase)
             search = find_element(app,By.XPATH, '//*[@id="search-input"]')
+            print (search)
             for alpha in alphabet:
                 print (11)
                 search.location_once_scrolled_into_view
