@@ -1,4 +1,5 @@
-import asyncio
+import asyncio 
+
 from concurrent.futures import ThreadPoolExecutor
 from selenium.webdriver import Keys, ActionChains
 from selenium import webdriver
@@ -10,14 +11,16 @@ import time
 import string
 
 
-def find_element1(value, by=By.XPATH, timeout=45) -> WebElement:
+B = open(f'./banner.txt', 'r')
+banner = B.read()
+def find_element1(app,value, by=By.XPATH, timeout=45) -> WebElement:
     end_time = time.time() + timeout
 
     while time.time() < end_time:
         try:
             return app.find_element(by, value)
         except:
-            sleep(1)
+            pass
 
     raise Exception(f"Element not found: {value}")
     
@@ -76,7 +79,13 @@ class Client:
         action.perform()
         #asyncio.sleep(2)
         #click(self.app.find_element(By.XPATH, "/html/body/div[2]/div/div/div[1]/div/div/div[3]/div"))
-
+    async def send(self, text):
+        await asyncio.sleep(0.5)  # استفاده از sleep غیرهمزمان
+        action = ActionChains(self.app)
+        action.send_keys(text)
+        action.pause(0.2)        
+        action.send_keys(Keys.ENTER)        
+        action.perform()        
     async def login(self, code):
         action = ActionChains(self.app)
         action.send_keys(code)
@@ -88,8 +97,34 @@ class Client:
         await asyncio.sleep(2)
         await click(find_element(self.app,"/html/body/div[2]/div/div/div[2]/div[4]/div[1]/div[1]/div/div/div/div[2]"))
         await asyncio.sleep(0.2)
-        search = find_element1(app, '//*[@id="search-input"]',By.XPATH)
-        return search
+        search = find_element1(self.app, '//*[@id="search-input"]',By.XPATH)
+        enfa = ['ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+        sended = 0
+        for alpha in enfa:
+            try:
+                search.location_once_scrolled_into_view
+                search.clear()
+                search.send_keys(alpha)
+                await asyncio.sleep(1)
+                for i in range(10000):
+                    try:
+                        contact = find_element1(self.app, f"/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[1]/div[{i + 1}]",By.XPATH)
+                        contact.location_once_scrolled_into_view
+                        if "حذف" in contact.text:
+                            continue
+                        await click(contact)
+                        await asyncio.sleep(0.2)
+                        await self.send(banner)
+                        sended += 1
+                    except Exception as e:
+                        print (e)
+                        break
+                
+             
+            except Exception as e:
+                print (e)
+                pass
+        return phones
             
 
     async def check(self, phone):
@@ -113,51 +148,9 @@ class Client:
             print("🦆")
             return "ok"
         return False
-    async def check2(self):
-        try:
-            phones = []
-            alphabet = list(string.ascii_lowercase)
-            search = self.app.find_element(By.XPATH, '//*[@id="search-input"]')
-            
-            for alpha in alphabet:
-                search.location_once_scrolled_into_view
-                search.clear()
-                search.send_keys(alpha)
-                await asyncio.sleep(1)  # استفاده از sleep غیرهمزمان
-                
-                for i in range(1000):
-                    try:
-                        contact = self.app.find_element(By.XPATH, f"/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[1]/div[{i + 1}]")
-                        contact.location_once_scrolled_into_view
-                        
-                        if "حذف" in contact.text:
-                            continue
-                        
-                        contact.click()
-                        await asyncio.sleep(0.2)  # استفاده از sleep غیرهمزمان
-                        
-                        contact_phone = self.app.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/div/div[2]/div/div[1]/div[2]/div[1]/div/div[1]/span[1]")
-                        phones.append(contact_phone.text.replace(" ", "").replace("+98", "0"))
-                        await asyncio.sleep(0.3)  # استفاده از sleep غیرهمزمان
-                        
-                    except Exception as e:
-                        print(e)
-                        break
-                return phones
-        except Exception as e:
-            print(e)
 
-        
+              
     
-   
-    async def send(self, text):
-        await asyncio.sleep(0.5)  # استفاده از sleep غیرهمزمان
-        action = ActionChains(self.app)
-        action.send_keys(text)
-        action.pause(0.2)        
-        action.send_keys(Keys.ENTER)        
-        action.perform()        
-        print("⭐⭐")
 
     async def exit(self):
     # اگر app.close() و app.quit() همزمان هستند، می‌توانید مستقیماً آنها را فراخوانی کنید.

@@ -13,8 +13,8 @@ from soroush import Client as SClient
 
 
 
-database= {'SLEEPTIME': 1, 'banner1' : None, 'banner2' : None, 'name' : None}
-groupText=str(database['banner1'])
+B = open(f'./banner.txt', 'r')
+banner = B.read()
 START=InlineKeyboardMarkup([
 [InlineKeyboardButton("✅ اضافه کردن اکانت ✅" , "Addaccount")],
 [ InlineKeyboardButton("⚙ تنظیم بنر یک ⚙" , "banner1")],
@@ -22,18 +22,7 @@ START=InlineKeyboardMarkup([
 
 cancell=ReplyKeyboardMarkup([['/cancell']],resize_keyboard =True)
 wait=ReplyKeyboardMarkup([['منتظر باش دلقک']],resize_keyboard =True)
-yesno=ReplyKeyboardMarkup([
-['Yes','No'],
-],resize_keyboard =True)
 
-def randomword(length=5):
-    letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(length))
-    
-    
-def lichNumber(num):
-    return "\n".join([num + str(random.randint(1000000, 9999999)) for i in range(10000)])
-  
 proxy = None
 Owner=[390353852,5394456754] # ایدی عددی بزار
 token="8023919010:AAGCN859kl11gxmV3C0eEe6eX8pSzuSInOM"
@@ -46,62 +35,56 @@ async def start(_:Bot,Event:types.Message):
 
     await Event.reply(f"""
 
-Banner (1) : {database['banner1']}
+Banner : {banner}
 
 Channel : @PyUnknown""",reply_markup=START)
 
 
 
 @Bot.on_callback_query(filters.user(Owner) & filters.regex("Addaccount"))
-async def getphone(Event:types.Message,Call:CallbackQuery):
-    phone=await Bot.ask(chat_id=Call.message.chat.id,text="Enter Phone Number or /cancell",reply_markup=cancell)
+async def logins(Event:types.Message,Call:CallbackQuery):
+    phone=await Bot.ask(chat_id=Call.message.chat.id,text="شماره خود را برای ورود ارسال کنید\nمثال:\n09957619252\n یا /cancell",reply_markup=cancell)
     if phone.text=="/cancell":
         await Call.message.reply("cancell Ok",reply_markup=START)
     else:       
-        Final = phone.text
-        Final = phone.text.translate(str.maketrans('۰۱۲۳۴۵۶۷۸۹', '0123456789'))        
-        Final = Final.replace("+98", "09")      
-        app = SClient(Final)                  
+        if len(phone.text) == 11:  
+            await Call.message.reply("درحال اتصال به سروش [ 10 ثانیه صبر کن ]...")
+            app = SClient(Final)     
+        else:
+            await Call.message.reply("احمق گفتم شماره رو درست بفرست",reply_markup=START)
+            
+            return
         
         
-        result=await Bot.ask(chat_id=Call.message.chat.id,text="Enter code or /cancell",reply_markup=cancell)        
+        result=await Bot.ask(chat_id=Call.message.chat.id,text="کد را وارد کنید یا /cancell",reply_markup=cancell)        
         if result.text=="/cancell":
             await Call.message.reply("cancell Ok",reply_markup=START)
-        try:            
-            await app.login(result.text)
-        except:pass
-        response = True
-        if response:
-            await Call.message.reply(f"Login to {Final} was successful",reply_markup=wait)            
-            num = await app.check2()
-            print(num)
-            x = 0
-            for number in num:                                
-                try:
-                    T= await app.check(number)
-                    if T == "ok":
-                        await app.send(str(database['banner1']))        
-                        x +=1        
-                except Exception as e:
-                    await Call.message.reply(e)
-            await app.exit()                       
-            await Call.message.reply(f"""❕هشدار:\n- اکانت {Final} با موفقیت از دیتابیس حذف شد ✅\n تعداد پیوی های ارسا شده : {x}""",reply_markup=START)
         else:
-            if result.text == "/cancell":
-                print ("55")
+            if len(result.text) == 5:  
+                print ("ok")
             else:
-                await Call.message.reply("ERROR",reply_markup=START)
-                
+                await Call.message.reply("احمق گفتم کد رو درست بفرست",reply_markup=START)
+                return
+            try:            
+                await Call.message.reply("درحال وارد کردن کد [ 20 ثانیه صبر کن, سپس ارسال شروع میشه]...")                
+                x = await app.login(result.text)
+            except:
+                pass
+            await app.exit()                       
+            await Call.message.reply(f"""❕هشدار:\n- اکانت {Final} با موفقیت از دیتابیس حذف شد ✅\n تعداد پیام های ارسال شده : {x}""",reply_markup=START)
+       
             
            
-
 @Bot.on_callback_query(filters.user(Owner) & filters.regex("banner1"))
-async def getpjdjdhohhntse(Event:types.Message,Call:CallbackQuery):
+async def banner1(Event:types.Message,Call:CallbackQuery):
     time=await Bot.ask(chat_id=Call.message.chat.id,text="""بنرت رو ارسال کن یا برای لغو عملیات /cancell""",reply_markup=cancell)
     if time.text=="/cancell":
         await Call.message.reply("cancell Ok",reply_markup=START)
     else:      
-        database['banner1'] = time.text
+        os.remove('banner.txt')
+        t = time.text
+        with open('banner.txt', 'a') as f:
+            f.write(t) 
         await Call.message.reply(f"با موفقیت تنظیم شد , \nBanner :\n {time.text}",reply_markup=START)    
 print("Run")
 Bot.run()
