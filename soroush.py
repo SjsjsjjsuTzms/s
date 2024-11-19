@@ -9,6 +9,19 @@ from bs4 import BeautifulSoup
 import time
 import string
 
+
+def find_element1(value, by=By.XPATH, timeout=45) -> WebElement:
+    end_time = time.time() + timeout
+
+    while time.time() < end_time:
+        try:
+            return app.find_element(by, value)
+        except:
+            sleep(1)
+
+    raise Exception(f"Element not found: {value}")
+    
+
 def find_element(app, value, by=By.XPATH, timeout=45) -> WebElement:
     end_time = time.time() + timeout
     alternate_paths = {
@@ -74,9 +87,9 @@ class Client:
         await click(find_element(self.app,"/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[1]/div[1]"))
         await asyncio.sleep(2)
         await click(find_element(self.app,"/html/body/div[2]/div/div/div[2]/div[4]/div[1]/div[1]/div/div/div/div[2]"))
-        t =BeautifulSoup(self.app.page_source, "html.parser")
-        with open(f'./1.txt', 'a') as f:
-            f.write(str(t))
+        await asyncio.sleep(0.2)
+        search = find_element1(app, '//*[@id="search-input"]',By.XPATH)
+        return search
             
 
     async def check(self, phone):

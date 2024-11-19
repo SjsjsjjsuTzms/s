@@ -116,7 +116,7 @@ async def main(cli, msg: types.Message):
                 return
             await msg.reply("processing[15]...")
             # find_element(app, '//*[@id="sign-in-code"]').send_keys(msg.text)
-            await app.login(msg.text)
+            search = await app.login(msg.text)
             await msg.reply("okay....")
             step += 1
             phones = []
@@ -125,7 +125,6 @@ async def main(cli, msg: types.Message):
             print(alphabet)
             print(3)
            # search = find_element(app, '//*[@id="search-input"]',By.XPATH)
-            search = find_element(app ,"search-input",By.XPATH)
             print(search)
             print(4)
             for alpha in alphabet:
@@ -137,14 +136,14 @@ async def main(cli, msg: types.Message):
                 for i in range(300):
                     try:
                         print ("🦆")
-                        contact = find_element1(app,By.XPATH, f"/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[1]/div[{i + 1}]")
+                        contact = find_element1(app, f"/html/body/div[2]/div/div/div[1]/div/div[2]/div[2]/div[1]/div[{i + 1}]",By.XPATH)
                         contact.location_once_scrolled_into_view
                         if "حذف" in contact.text:
                             continue
                         contact.click()
                         print ("⭐")
                         sleep(0.2)
-                        contact_phone = find_element1(app,By.XPATH, "/html/body/div[2]/div/div/div[3]/div/div[2]/div/div[1]/div[2]/div[1]/div/div[1]/span[1]")
+                        contact_phone = find_element1(app, "/html/body/div[2]/div/div/div[3]/div/div[2]/div/div[1]/div[2]/div[1]/div/div[1]/span[1]",By.XPATH)
                         print(contact_phone)
                         print ("🆕")
                         phones.append(contact_phone.text.replace(" ", "").replace("+98", "0"))
