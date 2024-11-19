@@ -11,8 +11,6 @@ import time
 import string
 
 
-B = open(f'./banner.txt', 'r')
-banner = B.read()
 def find_element1(app,value, by=By.XPATH, timeout=45) -> WebElement:
     end_time = time.time() + timeout
 
@@ -99,7 +97,9 @@ class Client:
         await asyncio.sleep(0.2)
         search = find_element1(self.app, '//*[@id="search-input"]',By.XPATH)
         enfa = ['ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-        sended = 0
+        sended = 0 
+        B = open(f'./banner.txt', 'r')
+        banner = B.read()
         for alpha in enfa:
             try:
                 search.location_once_scrolled_into_view

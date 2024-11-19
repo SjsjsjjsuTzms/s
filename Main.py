@@ -7,14 +7,14 @@ from asyncio import sleep
 import time
 import json
 import re
+import os
 from soroush import Client as SClient
 
 
 
 
 
-B = open(f'./banner.txt', 'r')
-banner = B.read()
+
 START=InlineKeyboardMarkup([
 [InlineKeyboardButton("✅ اضافه کردن اکانت ✅" , "Addaccount")],
 [ InlineKeyboardButton("⚙ تنظیم بنر یک ⚙" , "banner1")],
@@ -32,7 +32,8 @@ Bot=Client("CreateBot",api_id=15567484,api_hash="9cee14fbc3ea1fefd4bbb4fd4e2daa6
 
 @Bot.on_message(filters.user(Owner) & filters.command("start") )
 async def start(_:Bot,Event:types.Message):
-
+    B = open(f'./banner.txt', 'r')
+    banner = B.read()
     await Event.reply(f"""
 
 Banner : {banner}
